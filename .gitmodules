@@ -1,0 +1,9 @@
+[submodule "lib/pio_midi_uart_lib"]
+	path = lib/pio_midi_uart_lib
+	url = https://github.com/rppicomidi/pio_midi_uart_lib.git
+[submodule "lib/ring_buffer_lib"]
+	path = lib/ring_buffer_lib
+	url = https://github.com/rppicomidi/ring_buffer_lib.git
+[submodule "lib/preprocessor"]
+	path = lib/preprocessor
+	url = https://github.com/boostorg/preprocessor.git
