@@ -101,7 +101,10 @@
 #define CFG_TUD_MIDI_NUMCABLES_IN 2
 // Number of virtual MIDI cables OUT from the host
 #define CFG_TUD_MIDI_NUMCABLES_OUT 6
-
+// Support MIDI port string labels after the serial number string
+// Set this to the first available string descriptor number or
+// 0 if you do not wish to label the MIDI jacks with strings
+#define CFG_TUD_MIDI_FIRST_PORT_STRIDX 4
 // MIDI FIFO size of TX and RX
 #define CFG_TUD_MIDI_RX_BUFSIZE   (TUD_OPT_HIGH_SPEED ? 512 : 64)
 #define CFG_TUD_MIDI_TX_BUFSIZE   (TUD_OPT_HIGH_SPEED ? 512 : 64)

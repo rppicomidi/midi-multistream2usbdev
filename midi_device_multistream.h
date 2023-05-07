@@ -49,9 +49,22 @@
 #define TUD_MIDI_MULTI_JACKID_OUT_EXT(_cablenum, _numcables_in) \
   (uint8_t)((_cablenum) * 2 + 2 + ((_numcables_in) * 2))
 
+#ifndef CFG_TUD_MIDI_FIRST_PORT_STRIDX
+#define CFG_TUD_MIDI_FIRST_PORT_STRIDX 0
+#endif
+
+#if CFG_TUD_MIDI_FIRST_PORT_STRIDX
+#define EMB_IN_JACK_STRIDX(n) (n+(CFG_TUD_MIDI_FIRST_PORT_STRIDX))
+#define EMB_OUT_JACK_STRIDX(_numcables_in, n) (n+_numcables_in+(CFG_TUD_MIDI_FIRST_PORT_STRIDX))
+#else
+#define EMB_IN_JACK_STRIDX(n) 0
+#define EMB_OUT_JACK_STRIDX(_numcables_in, n) 0
+#endif
+
+
 #define TUD_MIDI_MULTI_JACK_IN_DESC(_cablenum, _stridx)\
   /* MS In Jack (External) */\
-  6, TUSB_DESC_CS_INTERFACE, MIDI_CS_INTERFACE_IN_JACK, MIDI_JACK_EXTERNAL, TUD_MIDI_MULTI_JACKID_IN_EXT(_cablenum), _stridx,\
+  6, TUSB_DESC_CS_INTERFACE, MIDI_CS_INTERFACE_IN_JACK, MIDI_JACK_EXTERNAL, TUD_MIDI_MULTI_JACKID_IN_EXT(_cablenum), 0,\
   /* MS Out Jack (Embedded), connected to In Jack External */\
   9, TUSB_DESC_CS_INTERFACE, MIDI_CS_INTERFACE_OUT_JACK, MIDI_JACK_EMBEDDED, TUD_MIDI_MULTI_JACKID_OUT_EMB(_cablenum), 1, TUD_MIDI_MULTI_JACKID_IN_EXT(_cablenum), 1, _stridx
 
@@ -61,14 +74,14 @@
   /* MS In Jack (Embedded) */\
   6, TUSB_DESC_CS_INTERFACE, MIDI_CS_INTERFACE_IN_JACK, MIDI_JACK_EMBEDDED, TUD_MIDI_MULTI_JACKID_IN_EMB(_cablenum, _numcables_in), _stridx,\
   /* MS Out Jack (External), connected to In Jack Embedded */\
-  9, TUSB_DESC_CS_INTERFACE, MIDI_CS_INTERFACE_OUT_JACK, MIDI_JACK_EXTERNAL, TUD_MIDI_MULTI_JACKID_OUT_EXT(_cablenum, _numcables_in), 1, TUD_MIDI_MULTI_JACKID_IN_EMB(_cablenum, _numcables_in), 1, _stridx
+  9, TUSB_DESC_CS_INTERFACE, MIDI_CS_INTERFACE_OUT_JACK, MIDI_JACK_EXTERNAL, TUD_MIDI_MULTI_JACKID_OUT_EXT(_cablenum, _numcables_in), 1, TUD_MIDI_MULTI_JACKID_IN_EMB(_cablenum, _numcables_in), 1, 0
 
 #define TUD_MIDI_MULTI_DESC_LEN(_numcables_in, _numcables_out) (TUD_MIDI_DESC_HEAD_LEN + TUD_MIDI_MULTI_DESC_JACK_LEN(_numcables_in) +\
                                                                 TUD_MIDI_MULTI_DESC_JACK_LEN(_numcables_out) +\
                                                                 TUD_MIDI_DESC_EP_LEN(_numcables_in) + TUD_MIDI_DESC_EP_LEN(_numcables_out))
 
-#define TUD_MIDI_MULTI_DESC_JACK_IN_ENUM_DESC(z, n, data) TUD_MIDI_MULTI_JACK_IN_DESC(n, 0)
-#define TUD_MIDI_MULTI_DESC_JACK_OUT_ENUM_DESC(z, n, _numcables_in) TUD_MIDI_MULTI_JACK_OUT_DESC(n, _numcables_in, 0)
+#define TUD_MIDI_MULTI_DESC_JACK_IN_ENUM_DESC(z, n, data) TUD_MIDI_MULTI_JACK_IN_DESC(n, EMB_IN_JACK_STRIDX(n))
+#define TUD_MIDI_MULTI_DESC_JACK_OUT_ENUM_DESC(z, n, _numcables_in) TUD_MIDI_MULTI_JACK_OUT_DESC(n, _numcables_in, EMB_OUT_JACK_STRIDX(_numcables_in, n))
 #define TUD_MIDI_MULTI_DESC_JACK_DESC(_numcables_in, _numcables_out)\
   BOOST_PP_ENUM(_numcables_in, TUD_MIDI_MULTI_DESC_JACK_IN_ENUM_DESC, 0),\
   BOOST_PP_ENUM(_numcables_out, TUD_MIDI_MULTI_DESC_JACK_OUT_ENUM_DESC, _numcables_in)
