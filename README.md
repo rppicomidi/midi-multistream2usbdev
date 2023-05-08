@@ -1,9 +1,11 @@
 # midi-multistream2usbdev
 2-in, 6-out 5 pin DIN MIDI to USB MIDI converter for the Raspberry Pi Pico
 
+![](docs/picoinstalled.jpg)
+
 This project uses a single Raspberry Pi Pico board, some resistors and
 capacitors, 2 H11L1/Sharp PC900V optoisolators, and 8 5-pin DIN connectors
-to make a USB device that gives a PC 2 MIDI In ports and 6 MIDI Out ports.
+to make a USB device that gives a PC two MIDI In ports and six MIDI Out ports.
 It uses the PIO hardware inside the Pico board's RP2040 chip to create
 the serial ports that the DIN MIDI connectors require. It uses the RP2040's
 USB hardware for the USB interface. The device is bus powered; no external
@@ -63,6 +65,16 @@ The I/O pins are
 | 24         | MIDI OUT D | 18           |
 | 5          | MIDI OUT E | 3            |
 | 32         | MIDI OUT F | 27           |
+
+I built the circuit to fit into a very small plastic box. To make it fit, I hid the
+optoisolators under the Pico board. You can see the 0.1 uF bypass capacitor I used
+for the 3.3V power supply on the PC900V chips. The two MIDI In connectors are on
+the right edge of the board, and the MIDI Out connectors on the upper and lower
+edges. The first photo at the beginning of this document shows the fully assembled
+board. It uses the built-in microUSB connector of the Pico board to attach to the
+computer. 
+
+![](docs/optoisolators.jpg)
 
 # How the code works
 This project uses the `pico-sdk` and the `tinyusb` project for the USB access. The
