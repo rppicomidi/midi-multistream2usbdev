@@ -11,12 +11,19 @@ Build Instructions
 This assumes you have installed the pico-sdk in ${PICO_SDK_PATH}.
 
 cd ${PICO_SDK_PATH}/..
+
 git clone https://github.com/Ming-Kerr/midi-multistream2usbdev
+
 cd midi-multistream2usbdev
+
 git submodule update --recursive --init
+
 mkdir build
+
 cd build
+
 cmake -DCMAKE_BUILD_TYPE=Debug ..
+
 make
 
 
