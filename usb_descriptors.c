@@ -147,16 +147,16 @@ char const* string_desc_arr [] =
 {
   (const char[]) { 0x09, 0x04 }, // 0: is supported language is English (0x0409)
   "TinyUSB",                     // 1: Manufacturer
-  "TinyUSB Device",              // 2: Product
-  "123456",                      // 3: Serials, should use chip ID
-  "MIDI IN A",
-  "MIDI IN B",
-  "MIDI OUT A",
-  "MIDI OUT B",
-  "MIDI OUT C",
-  "MIDI OUT D",
-  "MIDI OUT E",
-  "MIDI OUT F",
+  "Pico MIDI",              // 2: Product
+  "EEE5E8F6",                      // 3: Serials, should use chip ID
+  "IN A",
+  "IN B",
+  "IN C",
+  "IN D",
+  "OUT A",
+  "OUT B",
+  "OUT C",
+  "OUT D"
 };
 
 static uint16_t _desc_str[32];
