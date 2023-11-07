@@ -149,14 +149,18 @@ char const* string_desc_arr [] =
   "TinyUSB",                     // 1: Manufacturer
   "Pico MIDI",              // 2: Product
   "EEE5E8F6",                      // 3: Serials, should use chip ID
-  "IN A",
-  "IN B",
-  "IN C",
-  "IN D",
-  "OUT A",
-  "OUT B",
-  "OUT C",
-  "OUT D"
+  "IN 01",
+  "IN 02",
+  "IN 03",
+  "IN 04",
+  "IN 05",
+  "IN 06",
+  "OUT 01",
+  "OUT 02",
+  "OUT 03",
+  "OUT 04",
+  "OUT 05",
+  "OUT 06"
 };
 
 static uint16_t _desc_str[32];

@@ -98,9 +98,9 @@
 #define CFG_TUD_VENDOR            0
 
 // Number of virtual MIDI cables IN to the host
-#define CFG_TUD_MIDI_NUMCABLES_IN 4
+#define CFG_TUD_MIDI_NUMCABLES_IN 6
 // Number of virtual MIDI cables OUT from the host
-#define CFG_TUD_MIDI_NUMCABLES_OUT 4
+#define CFG_TUD_MIDI_NUMCABLES_OUT 6
 // Support MIDI port string labels after the serial number string
 // Set this to the first available string descriptor number or
 // 0 if you do not wish to label the MIDI jacks with strings
