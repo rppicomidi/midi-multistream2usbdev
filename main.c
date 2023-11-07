@@ -85,11 +85,12 @@ static const uint MIDI_IN_D_GPIO = 9;
 int main(void)
 {
   board_init();
-
+  
   // init device stack on configured roothub port
   tud_init(BOARD_TUD_RHPORT);
 
   // Create the MIDI UARTs and MIDI OUTs
+
   midi_uarts[0] = pio_midi_uart_create(MIDI_OUT_A_GPIO, MIDI_IN_A_GPIO);
   midi_uarts[1] = pio_midi_uart_create(MIDI_OUT_B_GPIO, MIDI_IN_B_GPIO);
   midi_uarts[2] = pio_midi_uart_create(MIDI_OUT_C_GPIO, MIDI_IN_C_GPIO);
@@ -98,7 +99,7 @@ int main(void)
 //  midi_outs[1] = pio_midi_out_create(MIDI_OUT_F_GPIO);
 //  midi_outs[2] = pio_midi_out_create(MIDI_OUT_E_GPIO);
 //  midi_outs[3] = pio_midi_out_create(MIDI_OUT_F_GPIO);
-  printf("4-IN 6-OUT USB MIDI Device adapter\r\n");
+  printf("4-IN 4-OUT USB MIDI Device adapter\r\n");
   // 
   while (1)
   {
@@ -196,7 +197,7 @@ static void poll_usb_rx(bool connected)
 static void drain_serial_port_tx_buffers()
 {
     uint8_t cable;
-    for (cable = 0; cable < 5; cable++) {
+    for (cable = 0; cable < 4; cable++) {
         pio_midi_uart_drain_tx_buffer(midi_uarts[cable]);
     }
 //    for (cable = 5; cable < 7; cable++) {
