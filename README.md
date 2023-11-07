@@ -19,4 +19,5 @@ cd build
 cmake -DCMAKE_BUILD_TYPE=Debug ..  (or -DCMAKE_BUILD_TYPE=release)
 make
 
+
 A skilled coder should be able to combine the hardware UARTS along with the PIO for a full 6x6 interface, but I'm struggling with that right now ;)
