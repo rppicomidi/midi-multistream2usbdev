@@ -64,12 +64,18 @@ static void midi_task(void);
 
 // UART selection Pin mapping. You can move these for your design if you want to
 // Make sure all these values are consistent with your choice of midi_uart
-#define MIDI_UART_NUM 1
-const uint MIDI_UART_TX_GPIO = 4;
-const uint MIDI_UART_RX_GPIO = 5;
+#define MIDI_UART_NUM 0
+#define MIDI_UART0_NUM 0
+#define MIDI_UART1_NUM 1
 
-static void *midi_uart_instance;
+const uint MIDI_UART0_TX_GPIO = 0;
+const uint MIDI_UART0_RX_GPIO = 1;
 
+const uint MIDI_UART1_TX_GPIO = 4;
+const uint MIDI_UART1_RX_GPIO = 5;
+
+static void *midi_uart0_instance;
+static void *midi_uart1_instance;
 
 static void* midi_uarts[4]; // MIDI IN A, B, C, D and MIDI OUT A, B, C, D
 //static void* midi_outs[2];  // MIDI OUT E-F
@@ -98,8 +104,9 @@ int main(void)
   // init device stack on configured roothub port
   tud_init(BOARD_TUD_RHPORT);
 
-// Hardware UART
-    midi_uart_instance = midi_uart_configure(MIDI_UART_NUM, MIDI_UART_TX_GPIO, MIDI_UART_RX_GPIO);
+// Hardware UARTS
+    midi_uart0_instance = midi_uart_configure(MIDI_UART0_NUM, MIDI_UART0_TX_GPIO, MIDI_UART0_RX_GPIO);
+    midi_uart1_instance = midi_uart_configure(MIDI_UART1_NUM, MIDI_UART1_TX_GPIO, MIDI_UART1_RX_GPIO);
 //    printf("Configured MIDI UART %u for %u baud\r\n", MIDI_UART_NUM, MIDI_UART_LIB_BAUD_RATE);
   
 // Create the MIDI UARTs and MIDI OUTs
@@ -111,7 +118,7 @@ int main(void)
 //  midi_outs[1] = pio_midi_out_create(MIDI_OUT_F_GPIO);
 //  midi_outs[2] = pio_midi_out_create(MIDI_OUT_E_GPIO);
 //  midi_outs[3] = pio_midi_out_create(MIDI_OUT_F_GPIO);
-  printf("4-IN 4-OUT USB MIDI Device adapter\r\n");
+//  printf("6-IN 6-OUT USB MIDI Device adapter\r\n");
   // 
   while (1)
   {
@@ -160,7 +167,7 @@ static void poll_midi_uart_rx(bool connected)
     uint8_t rx[48];
     // Pull any bytes received on the MIDI UART out of the receive buffer and
     // send them out via USB MIDI on virtual cable 0
-    uint8_t nread = midi_uart_poll_rx_buffer(midi_uart_instance, rx, sizeof(rx));
+    uint8_t nread = midi_uart_poll_rx_buffer(midi_uart0_instance, rx, sizeof(rx));
     if (nread > 0 && connected)
     {
         uint32_t nwritten = tud_midi_stream_write(0, rx, nread);
@@ -168,6 +175,15 @@ static void poll_midi_uart_rx(bool connected)
             TU_LOG1("Warning: Dropped %lu bytes receiving from UART MIDI In\r\n", nread - nwritten);
         }
     }
+    nread = midi_uart_poll_rx_buffer(midi_uart1_instance, rx, sizeof(rx));
+    if (nread > 0 && connected)
+    {
+        uint32_t nwritten = tud_midi_stream_write(1, rx, nread);
+        if (nwritten != nread) {
+            TU_LOG1("Warning: Dropped %lu bytes receiving from UART MIDI In\r\n", nread - nwritten);
+        }
+    }
+
 }
 
 
@@ -206,9 +222,13 @@ static void poll_usb_rx(bool connected)
             // then it is PIO MIDI OUTS
             npushed = pio_midi_uart_write_tx_buffer(midi_uarts[cable_num-2], rx, nread);
         }
-        else if (cable_num < 2) {
-            // then it is UART MIDI OUT
-            npushed = midi_uart_write_tx_buffer(midi_uart_instance,rx,nread);
+        else if (cable_num < 1) {
+            // then it is UART MIDI OUT 0
+            npushed = midi_uart_write_tx_buffer(midi_uart0_instance,rx,nread);
+        }
+        else if (cable_num = 1) {
+            // then it is UART MIDI OUT 1
+            npushed = midi_uart_write_tx_buffer(midi_uart1_instance,rx,nread);
         }
         else {
             TU_LOG1("Received a MIDI packet on cable %u", cable_num);
@@ -238,7 +258,8 @@ static void midi_task(void)
     poll_midi_uart_rx(connected);
     poll_midi_uarts_rx(connected);
     poll_usb_rx(connected);
-    midi_uart_drain_tx_buffer(midi_uart_instance);
+    midi_uart_drain_tx_buffer(midi_uart0_instance);
+    midi_uart_drain_tx_buffer(midi_uart1_instance);
     drain_serial_port_tx_buffers();
 }
 
