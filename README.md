@@ -6,8 +6,6 @@ https://github.com/diyelectromusic/sdemp_pcbs/tree/main/PicoMIDIRouter
 
 ![image](https://github.com/Ming-Kerr/midi-multistream2usbdev/assets/84568533/6e9e9b6e-adda-4e36-86cc-d235320ff4b7)
 ![image](https://github.com/Ming-Kerr/midi-multistream2usbdev/assets/84568533/070435ba-c6a8-42a4-bd95-9672ece8b1aa)
-![image](https://github.com/Ming-Kerr/midi-multistream2usbdev/assets/84568533/a31bf5a2-34d2-4501-92d9-3f7694bbc8bd)
-
 
 Build Instructions
 This assumes you have installed the pico-sdk in ${PICO_SDK_PATH}.
