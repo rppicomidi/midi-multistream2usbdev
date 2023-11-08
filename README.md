@@ -9,6 +9,7 @@ https://github.com/diyelectromusic/sdemp_pcbs/tree/main/PicoMIDIRouter
 
 Build Instructions
 This assumes you have installed the pico-sdk in ${PICO_SDK_PATH}.
+Will also need midi_uart_lib in lib folder.
 
 cd ${PICO_SDK_PATH}/..
 
