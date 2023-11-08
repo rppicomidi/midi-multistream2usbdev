@@ -1,6 +1,6 @@
 # midi-multistream2usbdev
 
-Modified version to work with Pico MIDI hat (link below) as a 4x4 MIDI interface using PIO MIDI...
+Modified version to work with Pico MIDI hat (link below) as a 6x6 MIDI interface using PIO MIDI...
 
 https://github.com/diyelectromusic/sdemp_pcbs/tree/main/PicoMIDIRouter
 
@@ -26,5 +26,3 @@ cmake -DCMAKE_BUILD_TYPE=Debug ..
 
 make
 
-
-A skilled coder should be able to combine the hardware UARTS along with the PIO for a full 6x6 interface, but I'm struggling with that right now ;)
