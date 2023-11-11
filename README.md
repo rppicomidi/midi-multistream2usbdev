@@ -1,6 +1,6 @@
-# midi-multistream2usbdev
+# Raspberry Pi Pico 6in 6out MIDI Interface using both hardware UARTS and 4xPIO UARTS
 
-Modified version to work with Pico MIDI hat (link below) as a 6x6 MIDI interface using both PIO MIDI and hardware UARTS...
+Code built to work with Pico MIDI Routing hat (link below) as a 6x6 MIDI interface using both PIO MIDI and hardware UARTS...
 
 https://github.com/diyelectromusic/sdemp_pcbs/tree/main/PicoMIDIRouter
 
