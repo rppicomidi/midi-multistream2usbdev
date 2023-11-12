@@ -197,9 +197,9 @@ static void poll_midi_uarts_rx(bool connected)
 
         if (nread > 0 && connected)
         {
-            uint32_t nwritten = tud_midi_stream_write(cable+2, rx, nread);
+            uint32_t nwritten = tud_midi_stream_write(cable+2, rx, nread);       // Cable+2 is to keep ports in logical order
             if (nwritten != nread) {
-                TU_LOG1("Warning: Dropped %lu bytes receiving from UART MIDI In %c\r\n", nread - nwritten, 'A'+cable);
+                TU_LOG1("Warning: Dropped %lu bytes receiving from UART MIDI In %c\r\n", nread - nwritten, 'A'+cable+2);
             }
         }
     }
