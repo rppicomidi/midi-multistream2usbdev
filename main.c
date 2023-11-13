@@ -32,15 +32,6 @@
 #include "midi_uart_lib.h"
 #include "pio_midi_uart_lib.h"
 #include "midi_device_multistream.h"
-//--------------------------------------------------------------------+
-// This program routes 5-pin DIN MIDI IN signals A & B to USB MIDI
-// virtual cables 0 & 1 on the USB MIDI Bulk IN endpoint. It also
-// routes MIDI data from USB MIDI virtual cables 0-5 on the USB MIDI
-// Bulk OUT endpoint to the 5-pin DIN MIDI OUT signals A-F.
-// The Pico board's LED blinks in a pattern depending on the Pico's
-// USB connection state (See below).
-//--------------------------------------------------------------------+
-
 
 //--------------------------------------------------------------------+
 // MACRO CONSTANT TYPEDEF PROTYPES
@@ -90,12 +81,7 @@ static const uint MIDI_IN_C_GPIO = 8;
 static const uint MIDI_OUT_D_GPIO = 13;
 static const uint MIDI_IN_D_GPIO = 9;
 //static const uint MIDI_OUT_E_GPIO = 0;
-//static const uint MIDI_OUT_F_GPIO = 4;
 
-//static const uint MIDI_OUT_C_GPIO = 10;
-//static const uint MIDI_OUT_D_GPIO = 18;
-//static const uint MIDI_OUT_E_GPIO = 3;
-//static const uint MIDI_OUT_F_GPIO = 27;
 /*------------- MAIN -------------*/
 int main(void)
 {
@@ -115,11 +101,8 @@ int main(void)
   midi_uarts[2] = pio_midi_uart_create(MIDI_OUT_C_GPIO, MIDI_IN_C_GPIO);
   midi_uarts[3] = pio_midi_uart_create(MIDI_OUT_D_GPIO, MIDI_IN_D_GPIO);
 //  midi_outs[0] = pio_midi_out_create(MIDI_OUT_E_GPIO);
-//  midi_outs[1] = pio_midi_out_create(MIDI_OUT_F_GPIO);
-//  midi_outs[2] = pio_midi_out_create(MIDI_OUT_E_GPIO);
-//  midi_outs[3] = pio_midi_out_create(MIDI_OUT_F_GPIO);
-//  printf("6-IN 6-OUT USB MIDI Device adapter\r\n");
   // 
+
   while (1)
   {
     tud_task(); // tinyusb device task
@@ -162,10 +145,12 @@ void tud_resume_cb(void)
 //--------------------------------------------------------------------+
 // MIDI Task
 //--------------------------------------------------------------------+
-static void poll_midi_uart_rx(bool connected)
+
+
+static void poll_midi_uarts_rx(bool connected)
 {
     uint8_t rx[48];
-    // Pull any bytes received on the MIDI UART out of the receive buffer and
+    // Pull any bytes received on the MIDI UARTS out of the receive buffer and
     // send them out via USB MIDI on virtual cable 0
     uint8_t nread = midi_uart_poll_rx_buffer(midi_uart0_instance, rx, sizeof(rx));
     if (nread > 0 && connected)
@@ -184,14 +169,6 @@ static void poll_midi_uart_rx(bool connected)
         }
     }
 
-}
-
-
-static void poll_midi_uarts_rx(bool connected)
-{
-    uint8_t rx[48];
-    // Pull any bytes received on the MIDI UART out of the receive buffer and
-    // send them out via USB MIDI on virtual cable 0
     for (uint8_t cable = 0; cable < 4; cable++) {
         uint8_t nread = pio_midi_uart_poll_rx_buffer(midi_uarts[cable], rx, sizeof(rx));
 
@@ -248,14 +225,10 @@ static void drain_serial_port_tx_buffers()
     for (cable = 0; cable < 4; cable++) {
         pio_midi_uart_drain_tx_buffer(midi_uarts[cable]);
     }
-//    for (cable = 5; cable < 7; cable++) {
-//        pio_midi_out_drain_tx_buffer(midi_outs[cable-2]);
-//    }
 }
 static void midi_task(void)
 {
     bool connected = tud_midi_mounted();
-    poll_midi_uart_rx(connected);
     poll_midi_uarts_rx(connected);
     poll_usb_rx(connected);
     midi_uart_drain_tx_buffer(midi_uart0_instance);
